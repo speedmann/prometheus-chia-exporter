@@ -36,7 +36,7 @@ chia_time_to_win 7.99496e+06
 ```
 
 # Requirements
-The exporter is menat to be run from your chia-blockchain venv. Additionally you need `prometheus-client` as specified in `requirements.txt`
+The exporter is meant to be run from your chia-blockchain venv. Additionally you need `prometheus-client` as specified in `requirements.txt`
 
 ```
 cd chia-blockchain
@@ -46,7 +46,17 @@ pip install -r requirements.txt
 ```
 
 # Installation
-TODO: Systemd services
+copy the systemd unit files to `/etc/systemd/system/
+
+```
+sudo cp systemd/chia_exporter.service /etc/systemd/system
+# Edit the file to have correct chia blockchain path and username
+sudo systemctl daemon-reload
+sudo systemctl enable chia_exporter
+sudo systemctl start chia_exporter
+```
+
+
 Edit `self_hostname` in `prometheus-chia-exporter/chia-exporter.py` 
 
 # Usage
