@@ -70,3 +70,7 @@ scrape_configs:
     static_configs:
       - targets: ['nodeip:8000']
 ```
+
+# Donation
+If you like this work and it helps you to monitor your farm please consider donating XCH to `xch1z026zx5a7xask0srznwnv9ktllc96flvcsk9ly7k06dhnje0asfsym8xuc`
+It will be really appreciated and help me keeping this exporter working
