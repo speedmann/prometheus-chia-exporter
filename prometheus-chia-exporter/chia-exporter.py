@@ -47,7 +47,6 @@ async def main():
         average_block_time = await get_average_block_time(rpc_port)
         BLOCK_TIME.set(average_block_time)
         status =blockchain['sync']['synced']
-        print(status)
         if not status:
             SYNC_STATE.state('syncing')
         else:
