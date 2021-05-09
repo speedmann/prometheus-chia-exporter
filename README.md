@@ -33,6 +33,9 @@ chia_farmed_last_block 206883.0
 # HELP chia_time_to_win Expected time to win 
 # TYPE chia_time_to_win gauge
 chia_time_to_win 7.99496e+06
+# HELP chia_reward_address_info Farming rewards go to this address 
+# TYPE chia_reward_address_info gauge
+chia_reward_address_info{farmer_target="farmer_address",pool_target="pool_address"} 1.0
 ```
 
 # Requirements
