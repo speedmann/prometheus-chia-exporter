@@ -1,16 +1,19 @@
-from prometheus_client import start_http_server, Gauge, Enum
+from prometheus_client import start_http_server, Gauge, Enum, Info
 import asyncio
 import time
 from chia.rpc.wallet_rpc_api import WalletRpcApi
 from chia.rpc.wallet_rpc_client import WalletRpcClient
 from chia.rpc.full_node_rpc_client import FullNodeRpcClient
 from chia.rpc.harvester_rpc_client import HarvesterRpcClient
+from chia.rpc.farmer_rpc_client import FarmerRpcClient
 from chia.util.config import load_config
 from chia.util.default_root import DEFAULT_ROOT_PATH
 from chia.cmds.netspace_funcs import netstorge_async as w
 from chia.cmds.farm_funcs import get_average_block_time
 
 self_hostname="localhost"
+
+net_config={"daemon_ssl":{"private_crt":"","private_key":""}}
 
 
 NETSPACE = Gauge('chia_netspace_total', 'Current total netspace')
@@ -23,6 +26,7 @@ PLOTS_SIZE = Gauge('chia_plots_size', 'Total plot size farmed by harvester')
 FARMED_AMOUNT = Gauge('chia_farmed_amount', 'Total XCH farmed by harvester')
 FARMED_LAST = Gauge('chia_farmed_last_block', 'Last height a farm reward was farmed')
 TIME_TO_WIN = Gauge('chia_time_to_win', 'Expected time to win ')
+REWARD_ADDRESS = Info('chia_reward_address', 'Farming rewards go to this address ')
 
 async def main():
     try:
@@ -30,9 +34,11 @@ async def main():
         rpc_port = config["full_node"]["rpc_port"]
         wallet_rpc_port = config["wallet"]["rpc_port"]
         harvester_rpc_port = config["harvester"]["rpc_port"]
+        farmer_rpc_port = config["farmer"]["rpc_port"]
         client = await WalletRpcClient.create(self_hostname, wallet_rpc_port,DEFAULT_ROOT_PATH,config)
         client_node = await FullNodeRpcClient.create(self_hostname, rpc_port,DEFAULT_ROOT_PATH,config)
         client_harvester = await HarvesterRpcClient.create(self_hostname, harvester_rpc_port,DEFAULT_ROOT_PATH,config)
+        client_farmer = await FarmerRpcClient.create(self_hostname, farmer_rpc_port,DEFAULT_ROOT_PATH,config)
 
         # blockchain stuff
         blockchain = await client_node.get_blockchain_state()
@@ -78,11 +84,27 @@ async def main():
             proportion = plot_size_total / blockchain["space"] if blockchain["space"] else -1
             seconds = int((average_block_time) / proportion) if proportion else -1
         TIME_TO_WIN.set(seconds)
+
+        #Farmer stuff
+
+        reward_address = await client_farmer.get_reward_targets(False)
+        REWARD_ADDRESS.info({"farmer_target":reward_address["farmer_target"],"pool_target":reward_address["pool_target"]})
+
+
+
+    except Exception as e:
+        print('error connecting to something')
+        print(e)
+
+    finally:
         client.close()
         client_node.close()
         client_harvester.close()
-    except:
-        print('error connecting to something')
+        client_farmer.close()
+
+
+
+
 
 
 
