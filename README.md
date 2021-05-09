@@ -1,6 +1,9 @@
 # prometheus-chia-exporter
 Prometheus exporter for several chia node statistics
 It's assumed that the full node, the harvester and the wallet run on the same system.
+
+![dashboard](https://github.com/speedmann/prometheus-chia-exporter/blob/main/screenshots/dashboard.png?raw=true)
+
 ```
 # HELP chia_netspace_total Current total netspace
 # TYPE chia_netspace_total gauge
