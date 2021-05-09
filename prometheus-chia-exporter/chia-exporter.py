@@ -10,9 +10,7 @@ from chia.util.default_root import DEFAULT_ROOT_PATH
 from chia.cmds.netspace_funcs import netstorge_async as w
 from chia.cmds.farm_funcs import get_average_block_time
 
-self_hostname="full node ip"
-
-net_config={"daemon_ssl":{"private_crt":"","private_key":""}}
+self_hostname="localhost"
 
 
 NETSPACE = Gauge('chia_netspace_total', 'Current total netspace')
@@ -85,11 +83,6 @@ async def main():
         client_harvester.close()
     except:
         print('error connecting to something')
-
-
-
-
-
 
 
 
