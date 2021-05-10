@@ -20,6 +20,7 @@ BLOCK_TIME = Gauge('chia_average_block_time', 'Average time between blocks')
 HEIGHT = Gauge('chia_block_height', 'Current highest block')
 SYNC_STATE = Enum('chia_sync_state', 'Current sync state', states=['synced','syncing'])
 BALANCE = Gauge('chia_wallet_balance', 'Balance of wallets', ["name","id"])
+CONNECTIONS = Gauge('chia_node_connections', 'Currently open connections to node', ["type"])
 PLOTS_TOTAL = Gauge('chia_plots_count', 'Total plots farmed by harvester')
 PLOTS_SIZE = Gauge('chia_plots_size', 'Total plot size farmed by harvester')
 FARMED_AMOUNT = Gauge('chia_farmed_amount', 'Total XCH farmed by harvester')
@@ -61,6 +62,16 @@ async def main():
         height = await client.get_height_info()
         HEIGHT.set(height)
 
+        # connections
+        connections = await client_node.get_connections()
+        sum_connections_by_type = {}
+        for connection in connections:
+            if connection["type"] not in sum_connections_by_type:
+                sum_connections_by_type[connection["type"]] = 0
+            sum_connections_by_type[connection["type"]] += 1
+        for connection_type, sum_connections in sum_connections_by_type.items():
+            CONNECTIONS.labels(type=connection_type).set(sum_connections)
+
         # wallet stuff
         wallets = await client.get_wallets()
         wallet_amounts = {}
@@ -68,8 +79,6 @@ async def main():
             balance = await client.get_wallet_balance(wallet['id'])
             #wallet_amounts[wallet['name']] = balance['confirmed_wallet_balance']
             BALANCE.labels(name=wallet['name'], id=wallet['id']).set(balance['confirmed_wallet_balance'])
-
-
 
         # harvester stats
         plots = await client_harvester.get_plots()

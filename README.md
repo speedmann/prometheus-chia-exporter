@@ -21,6 +21,11 @@ chia_sync_state{chia_sync_state="syncing"} 0.0
 # HELP chia_wallet_balance Balance of wallets
 # TYPE chia_wallet_balance gauge
 chia_wallet_balance{id="1",name="Chia Wallet"} 1.899905e+012
+# HELP chia_node_connections Currently open connections to node
+# TYPE chia_node_connections gauge
+chia_node_connections{type="3"} 1.0
+chia_node_connections{type="1"} 22.0
+chia_node_connections{type="6"} 1.0
 # HELP chia_plots_count Total plots farmed by harvester
 # TYPE chia_plots_count gauge
 chia_plots_count 130.0
