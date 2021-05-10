@@ -1,6 +1,7 @@
 from prometheus_client import start_http_server, Gauge, Enum, Info
 import asyncio
 import time
+import os
 from chia.rpc.wallet_rpc_api import WalletRpcApi
 from chia.rpc.wallet_rpc_client import WalletRpcClient
 from chia.rpc.full_node_rpc_client import FullNodeRpcClient
@@ -10,8 +11,6 @@ from chia.util.config import load_config
 from chia.util.default_root import DEFAULT_ROOT_PATH
 from chia.cmds.netspace_funcs import netstorge_async as w
 from chia.cmds.farm_funcs import get_average_block_time
-
-self_hostname="localhost"
 
 net_config={"daemon_ssl":{"private_crt":"","private_key":""}}
 
@@ -31,14 +30,19 @@ REWARD_ADDRESS = Info('chia_reward_address', 'Farming rewards go to this address
 async def main():
     try:
         config = load_config(DEFAULT_ROOT_PATH, "config.yaml")
+        rpc_host = os.getenv("FULL_NODE_HOST", "localhost")
         rpc_port = config["full_node"]["rpc_port"]
+        wallet_host = os.getenv("WALLET_HOST", "localhost")
         wallet_rpc_port = config["wallet"]["rpc_port"]
+        harvester_host = os.getenv("HARVESTER_HOST", "localhost")
         harvester_rpc_port = config["harvester"]["rpc_port"]
+        farmer_host = os.getenv("FARMER_HOST", "localhost")
         farmer_rpc_port = config["farmer"]["rpc_port"]
-        client = await WalletRpcClient.create(self_hostname, wallet_rpc_port,DEFAULT_ROOT_PATH,config)
-        client_node = await FullNodeRpcClient.create(self_hostname, rpc_port,DEFAULT_ROOT_PATH,config)
-        client_harvester = await HarvesterRpcClient.create(self_hostname, harvester_rpc_port,DEFAULT_ROOT_PATH,config)
-        client_farmer = await FarmerRpcClient.create(self_hostname, farmer_rpc_port,DEFAULT_ROOT_PATH,config)
+
+        client = await WalletRpcClient.create(wallet_host, wallet_rpc_port,DEFAULT_ROOT_PATH,config)
+        client_node = await FullNodeRpcClient.create(rpc_host, rpc_port,DEFAULT_ROOT_PATH,config)
+        client_harvester = await HarvesterRpcClient.create(harvester_host, harvester_rpc_port,DEFAULT_ROOT_PATH,config)
+        client_farmer = await FarmerRpcClient.create(farmer_host, farmer_rpc_port,DEFAULT_ROOT_PATH,config)
 
         # blockchain stuff
         blockchain = await client_node.get_blockchain_state()
