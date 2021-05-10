@@ -26,6 +26,7 @@ FARMED_AMOUNT = Gauge('chia_farmed_amount', 'Total XCH farmed by harvester')
 FARMED_LAST = Gauge('chia_farmed_last_block', 'Last height a farm reward was farmed')
 TIME_TO_WIN = Gauge('chia_time_to_win', 'Expected time to win ')
 REWARD_ADDRESS = Info('chia_reward_address', 'Farming rewards go to this address ')
+DIFFICULTY = Gauge('chia_difficulty', 'Current blockchain difficulty ')
 
 async def main():
     try:
@@ -48,6 +49,8 @@ async def main():
         blockchain = await client_node.get_blockchain_state()
         netspace = blockchain['space']
         NETSPACE.set(netspace)
+        difficulty = blockchain["difficulty"]
+        DIFFICULTY.set(difficulty)
         average_block_time = await get_average_block_time(rpc_port)
         BLOCK_TIME.set(average_block_time)
         status =blockchain['sync']['synced']
