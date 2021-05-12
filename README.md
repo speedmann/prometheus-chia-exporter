@@ -79,8 +79,9 @@ sudo systemctl enable chia_exporter
 sudo systemctl start chia_exporter
 ```
 
+## Custom config
 
-Edit `self_hostname` in `prometheus-chia-exporter/chia-exporter.py` 
+You can monitor remote nodes by editing `/etc/default/chia_exporter.env` and changing the settings there 
 
 # Usage
 Start the systemd service
