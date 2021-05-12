@@ -63,8 +63,12 @@ pip install -r requirements.txt
 Copy the needed files to their locations as described below
 
 ```
+# Copy the systemd unit file
 sudo cp systemd/chia_exporter.service /etc/systemd/system
-# Edit the file to have correct chia blockchain path and username
+# Edit the unit file to have correct chia blockchain path and username
+# Copy the environment file
+sudo cp systemd/chia_exporter.env /etc/default/
+# If the node you want to monitor does not run on the same host as the exporter, edit the env file
 # copy the exporter to /usr/local/bin/
 sudo cp prometheus-chia-exporter/chia-exporter.py /usr/local/bin/
 # Reload systemd to have access to the new service

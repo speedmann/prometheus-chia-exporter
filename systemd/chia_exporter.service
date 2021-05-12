@@ -3,6 +3,7 @@ Description=Chia Exporter
 
 [Service]
 ExecStart=<path to chia-blockchain>/venv/bin/python /usr/local/bin/chia-exporter.py
+EnvironmentFile=/etc/default/chia_exporter.env
 User=<username where chia init was done>
 
 [Install]
