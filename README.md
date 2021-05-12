@@ -60,13 +60,18 @@ pip install -r requirements.txt
 ```
 
 # Installation
-copy the systemd unit files to `/etc/systemd/system/
+Copy the needed files to their locations as described below
 
 ```
 sudo cp systemd/chia_exporter.service /etc/systemd/system
 # Edit the file to have correct chia blockchain path and username
+# copy the exporter to /usr/local/bin/
+sudp cp prometheus-chia-exporter/chia-exporter.py /usr/local/bin/
+# Reload systemd to have access to the new service
 sudo systemctl daemon-reload
+# Make sure the service is started on system boot
 sudo systemctl enable chia_exporter
+# Start the service
 sudo systemctl start chia_exporter
 ```
 
