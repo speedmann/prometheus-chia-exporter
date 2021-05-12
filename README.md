@@ -99,6 +99,10 @@ scrape_configs:
 
 If you are running the full node on a different host or container, you can override the hostnames used for connecting to the daemons by setting one or all of the following environment variables: `FULL_NODE_HOST`, `WALLET_HOST`, `HARVESTER_HOST`, `FARMER_HOST`. All hostnames default to localhost.
 
+# Updating
+
+To update just copy the chia-exporter.py file to `/usr/local/bin/chia-exporter.py` again and restart the service `sodo systemctl restart chia_exporter`
+
 # Donation
 If you like this work and it helps you to monitor your farm please consider donating XCH to `xch1z026zx5a7xask0srznwnv9ktllc96flvcsk9ly7k06dhnje0asfsym8xuc`
 It will be really appreciated and help me keeping this exporter working
