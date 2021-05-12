@@ -76,13 +76,14 @@ Edit `self_hostname` in `prometheus-chia-exporter/chia-exporter.py`
 # Usage
 Start the systemd service
 Import `grafana/dashboard.json` to your grafana
+The exporter will listen on port 9824
 Add prometheus config
 
 ```
 scrape_configs:
   - job_name: 'chia'
     static_configs:
-      - targets: ['nodeip:8000']
+      - targets: ['nodeip:9824']
 ```
 
 # Overriding hostnames
