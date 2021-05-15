@@ -59,6 +59,12 @@ cd ../prometheus-chia-exporter
 pip install -r requirements.txt
 ```
 
+## Grafana
+The provided dashboard does use features which are only available in the latest (7.5.5) version of grafana.
+Please make sure you are using this or a newer version.
+
+You can still decide to use an older version but then the `farmer_address` and `pool_address` display does not work correct.
+
 # Installation
 Copy the needed files to their locations as described below
 
